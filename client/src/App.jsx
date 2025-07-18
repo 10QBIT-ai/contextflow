@@ -3,6 +3,8 @@ import ChatArea from './components/ChatArea';
 import Sidebar from './components/Sidebar';
 import SidebarRight from './components/SidebarRight';
 import { MODEL_CATEGORIES } from './utils/modeLMap';
+import './App.css';
+
 
 function App() {
   const [prompt, setPrompt] = useState('');
@@ -55,6 +57,7 @@ function App() {
     } catch (err) {
       console.error(err);
     }
+
     setLoading(false);
   };
 
@@ -80,14 +83,15 @@ function App() {
   };
 
   return (
-    <div style={{ display: 'flex', height: '100vh', fontFamily: 'sans-serif' }}>
+    <div className="app-container">
       <Sidebar
         history={history}
         onHistoryClick={handleHistoryClick}
         onSubClick={handleSubClick}
       />
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-        <div style={{ padding: 10, background: '#f2f2f2' }}>
+      <div className="chat-area">
+          <h3>ContextFlow&nbsp;</h3>
+        <div className="model-select-bar">
           <label>Model:&nbsp;</label>
           <select value={model} onChange={(e) => setModel(e.target.value)}>
             {Object.entries(MODEL_CATEGORIES).map(([key, val]) => (

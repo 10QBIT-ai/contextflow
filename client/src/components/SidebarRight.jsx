@@ -1,36 +1,48 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 function SidebarRight({ context, onFollowUp }) {
-  const [followUp, setFollowUp] = useState('');
+  const [followUpPrompt, setFollowUpPrompt] = useState('');
 
-  if (!context) return <div style={{ width: 300, borderLeft: '1px solid #ccc' }} />;
+  const handleSend = () => {
+    if (!followUpPrompt.trim()) return;
+    if (context?.parentIndex != null) {
+      onFollowUp(followUpPrompt, { ...context });
+      setFollowUpPrompt('');
+    }
+  };
+
+  if (!context) {
+    return (
+      <div className="sidebar-right">
+        <p>Select a paragraph to ask a follow-up question.</p>
+      </div>
+    );
+  }
 
   return (
-    <div style={{ width: 300, borderLeft: '1px solid #ccc', padding: 10, overflowY: 'auto' }}>
+    <div className="sidebar-right">
       <h3>📌 Context</h3>
-      <div style={{ marginBottom: 10, fontStyle: 'italic' }}>{context.text}</div>
 
-      <div style={{ marginBottom: 10 }}>
-        <strong>Answer:</strong>
-        <div style={{ whiteSpace: 'pre-wrap' }}>{context.response}</div>
+      <div className="context-block">
+        <div className="context-label">Selected Text:</div>
+        <div className="context-text">"{context.text}"</div>
       </div>
 
-      <textarea
-        placeholder="Ask more about this..."
-        value={followUp}
-        onChange={(e) => setFollowUp(e.target.value)}
-        rows={3}
-        style={{ width: '100%', marginTop: 10 }}
-      />
-      <button
-        onClick={() => {
-          onFollowUp(followUp, context);
-          setFollowUp('');
-        }}
-        style={{ marginTop: 10 }}
-      >
-        Ask
-      </button>
+      <div className="followup-section">
+        <textarea
+          value={followUpPrompt}
+          onChange={(e) => setFollowUpPrompt(e.target.value)}
+          placeholder="Ask a follow-up question..."
+        />
+        <button onClick={handleSend}>Ask</button>
+      </div>
+
+      {context.response && (
+        <div className="context-response">
+          <div className="context-label">Response:</div>
+          <div className="context-answer">{context.response}</div>
+        </div>
+      )}
     </div>
   );
 }

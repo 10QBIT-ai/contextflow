@@ -1,26 +1,32 @@
+import React from 'react';
+
 function Sidebar({ history, onHistoryClick, onSubClick }) {
   return (
-    <div style={{ width: 280, borderRight: '1px solid #ccc', padding: 10, overflowY: 'auto' }}>
-      <h3>📜 History</h3>
-      {history.map((item, idx) => (
-        <div key={idx} style={{ marginBottom: 15 }}>
-          <div
-            style={{ cursor: 'pointer', fontWeight: 'bold' }}
-            onClick={() => onHistoryClick(item, idx)}
-          >
-            {item.model} — {item.prompt.slice(0, 50)}
-          </div>
-          {item.subs && item.subs.map((sub, sIdx) => (
+    <div className="sidebar">
+      <h3>🕘 History</h3>
+      <div className="history-list">
+        {history.map((item, index) => (
+          <div key={index} className="history-item">
             <div
-              key={sIdx}
-              onClick={() => onSubClick(sub, idx)}
-              style={{ paddingLeft: 15, fontSize: 14, cursor: 'pointer', color: '#555' }}
+              className="history-main"
+              onClick={() => onHistoryClick(item, index)}
             >
-              ↳ {sub.question.slice(0, 40)}
+              <div className="history-model">{item.model}</div>
+              <div className="history-prompt">{item.prompt}</div>
             </div>
-          ))}
-        </div>
-      ))}
+
+            {item.subs?.map((sub, subIdx) => (
+              <div
+                key={subIdx}
+                className="history-sub"
+                onClick={() => onSubClick(sub, index)}
+              >
+                ↳ {sub.question}
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

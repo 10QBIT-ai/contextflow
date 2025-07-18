@@ -1,47 +1,42 @@
+import React from 'react';
+
 function ChatArea({ prompt, setPrompt, onSend, response, loading, onParagraphClick }) {
   const paragraphs = response ? response.split('\n').filter(Boolean) : [];
 
   return (
-    <div style={{ flex: 1, padding: 20, overflowY: 'auto' }}>
-      <h2>💬 AI Chat</h2>
+    <div className="chat-area">
+      <h2 className="chat-title">💬 Chat</h2>
+
       <textarea
+        className="chat-input"
         rows={4}
-        style={{ width: '100%' }}
         value={prompt}
         onChange={(e) => setPrompt(e.target.value)}
         placeholder="Ask something..."
       />
-      <div style={{ marginTop: 10 }}>
-        <button onClick={() => onSend()} disabled={loading}>
+
+      <div className="chat-controls">
+        <button className="send-btn" onClick={() => onSend()} disabled={loading}>
           {loading ? 'Thinking...' : 'Send'}
         </button>
         {prompt && (
-          <button
-            onClick={() => setPrompt('')}
-            style={{ marginLeft: 10, background: '#eee' }}
-          >
+          <button className="clear-btn" onClick={() => setPrompt('')}>
             Clear
           </button>
         )}
       </div>
 
       {paragraphs.length > 0 && (
-        <div style={{ marginTop: 20 }}>
+        <div className="chat-response">
           <strong>Response:</strong>
           {paragraphs.map((p, idx) => (
-            <p
+            <div
               key={idx}
+              className="chat-paragraph"
               onClick={() => onParagraphClick(p)}
-              style={{
-                cursor: 'pointer',
-                background: '#f9f9f9',
-                padding: 8,
-                borderRadius: 4,
-                marginTop: 6,
-              }}
             >
               {p}
-            </p>
+            </div>
           ))}
         </div>
       )}
